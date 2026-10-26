@@ -1,0 +1,26 @@
+{
+    "name": "EFPT Asset Management System",
+    "short_name": "EFPT_AMS",
+    "description": "Ethiopian Federal Police Technology Asset Management System",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#1a2a4a",
+    "theme_color": "#15243d",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "./assets/images/efplogo.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "./assets/images/efplogo.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["productivity", "business"],
+    "lang": "en"
+}

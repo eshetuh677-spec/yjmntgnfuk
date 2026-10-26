@@ -1,0 +1,37 @@
+# Environment / local secrets
+.env
+.env.*
+*.log
+*.sqlite
+*.db
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# PHP / web runtime
+vendor/
+composer.lock
+
+# Uploads (keep tracked sample .gitkeep only)
+uploads/*
+!uploads/.gitkeep
+
+# Backup / temp files
+*.bak
+*.orig
+*.tmp
+*.swp
+*.swo
+*~
+
+# IDE/editor settings
+.vscode/
+.idea/
+
+# Local generated assets
+cache/
+coverage/
+
+# Node.js (not used by this PHP project, but exclude if accidentally added)
+node_modules/

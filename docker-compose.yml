@@ -1,0 +1,86 @@
+# ============================================================
+# EFPT_AMS - Docker Configuration
+# ============================================================
+# Build: docker-compose up -d --build
+# Access: http://localhost:8080
+# ============================================================
+
+version: '3.8'
+
+services:
+  # PHP + Apache Web Server
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: efpt_ams_app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html/EFPT_AMS
+      - ./docker/php.ini:/usr/local/etc/php/conf.d/custom.ini
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASS=rootpassword
+      - DB_NAME=efpt_ams
+    networks:
+      - efpt_network
+
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: efpt_ams_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/sqlSchemaAll.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=efpt_ams
+      - MYSQL_CHARSET=utf8mb4
+      - MYSQL_COLLATION=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - efpt_network
+
+  # phpMyAdmin (optional, for development)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: efpt_ams_pma
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+    depends_on:
+      - db
+    networks:
+      - efpt_network
+
+  # Redis (optional, for session storage)
+  redis:
+    image: redis:7-alpine
+    container_name: efpt_ams_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - efpt_network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  efpt_network:
+    driver: bridge
